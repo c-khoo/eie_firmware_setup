@@ -1,0 +1,31 @@
+git commit:
+    desc: "saves" all the changes you've made to the files/directories in the project (like a checkpoint)
+    args: ?
+
+git branch:
+    desc: creates a new branch (version of the project) for you to work on, refers to a previous commit
+    args: <branch_name>
+
+git checkout:
+    desc: used to switch between branches
+    args: <branch_name>
+
+git pull:
+    desc: pulls and merges changes from the remote repository into your local repository
+    args: --rebase (rebases to origin/main instead of merging)
+
+git push:
+    desc: pushes ("publishes") your changes from your local repo to the remote repo
+    args: ?
+
+git merge:
+    desc: merges the contents of two branches together
+    args: <branch_name> (name of branch you want to merge into the one that's currently checked out)
+
+git rebase:
+    desc: points your branch to refer to a different commit instead of the one it was originally created off of
+    args: <branch_name> (of the branch you want to "rebase" to)
+
+git fetch:
+    desc: downloads changes from the remote repo to your local repo, but doesn't merge the changes (only updates origin/main)
+    args: ?
