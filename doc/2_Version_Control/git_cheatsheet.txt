@@ -1,14 +1,15 @@
 git commit:
     desc: "saves" all the changes you've made to the files/directories in the project (like a checkpoint)
-    args: ?
+    args: -m 'commit message'
 
 git branch:
     desc: creates a new branch (version of the project) for you to work on, refers to a previous commit
-    args: <branch_name>
+    args: <branchName>
 
 git checkout:
     desc: used to switch between branches
-    args: <branch_name>
+    args: <branchName>
+          -b <branchName> (to create a new branch and checkout at same time)
 
 git pull:
     desc: pulls and merges changes from the remote repository into your local repository
@@ -16,16 +17,28 @@ git pull:
 
 git push:
     desc: pushes ("publishes") your changes from your local repo to the remote repo
-    args: ?
+    args: -u <branchName> (if haven't pushed this branch to GitHub yet)
 
 git merge:
     desc: merges the contents of two branches together
-    args: <branch_name> (name of branch you want to merge into the one that's currently checked out)
+    args: <branchName> (name of branch you want to merge into the one that's currently checked out)
 
 git rebase:
     desc: points your branch to refer to a different commit instead of the one it was originally created off of
-    args: <branch_name> (of the branch you want to "rebase" to)
+    args: <branchName> (of the branch you want to "rebase" to)
 
 git fetch:
     desc: downloads changes from the remote repo to your local repo, but doesn't merge the changes (only updates origin/main)
+    args: ?
+
+git add:
+    desc: adds a file to "staging area" (how you stage your changes)
+    args: <fileName>
+
+git status:
+    desc: gives information about what changes have been made, which files are staged, etc
+    args: ?
+
+git log:
+    desc: prints a log of recent commits (newest commit on top)
     args: ?
