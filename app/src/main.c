@@ -36,13 +36,20 @@ int main(void) {
         return ret3;
     }
 
-    while (1) {
-        gpio_pin_toggle_dt(&led0);
-        gpio_pin_toggle_dt(&led1);
-        gpio_pin_toggle_dt(&led2);
-        gpio_pin_toggle_dt(&led3);
+    int toggle = 1;
 
-        k_msleep(1000);
+    while (1) {
+        toggle = !toggle;
+        
+        gpio_pin_toggle_dt(&led0);
+        
+        if (toggle) {
+            gpio_pin_toggle_dt(&led1);
+            gpio_pin_toggle_dt(&led2);
+            gpio_pin_toggle_dt(&led3);
+        }
+
+        k_msleep(500);
     }
 
     return 0;
