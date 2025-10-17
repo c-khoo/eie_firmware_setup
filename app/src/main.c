@@ -18,31 +18,64 @@ int main(void) {
     return 0;
   }
 
-  int count = 0;
+  int passkey[] = {0, 1, 2, 1, 0};
+  int n = sizeof(passkey) / sizeof(passkey[0]);
+
+  int i = 0;
+  int locked = 1;
+  LED_set(LED0, LED_ON);
+
   while(1) {
-    if (BTN_check_clear_pressed(BTN0)) {
-      count++;
+    int user_entered[n];
 
-      if (count == 16) {
-        count = 0;
+    while(locked) {
+      if (BTN_check_clear_pressed(BTN0)) {
+        if (i < n) {
+          user_entered[i] = 0;
+        }
+        i++;
       }
 
-      printk("Count is now: %d\n", count);
-
-      if ((count >= 8 || count == 0) && (count % 8 == 0)) {
-        LED_toggle(LED0);
+      if (BTN_check_clear_pressed(BTN1)) {
+        if (i < n) {
+          user_entered[i] = 1;
+        }
+        i++;
       }
 
-      if ((count >= 4 || count == 0) && (count % 4 == 0)) {
-        LED_toggle(LED1);
+      if (BTN_check_clear_pressed(BTN2)) {
+        if (i < n) {
+          user_entered[i] = 2;
+        }
+        i++;
       }
 
-      if (count % 2 == 0) {
-        LED_toggle(LED2);
-      }
+      if (BTN_check_clear_pressed(BTN3)) {
+        int valid = 1;
+        for (int j = 0; j < n; j++) {
+          if (passkey[j] != user_entered[j]) {
+            valid = 0;
+          }
+        }
 
-      LED_toggle(LED3);
+        if (valid && i == n) {
+          printk("Correct!\n");
+        } else {
+          printk("Incorrect!\n");
+        }
+
+        locked = 0;
+        LED_set(LED0, LED_OFF);
+      }
+      k_msleep(SLEEP_MS);
     }
+
+    if (BTN_check_clear_pressed(BTN0) || BTN_check_clear_pressed(BTN1) || BTN_check_clear_pressed(BTN2) || BTN_check_clear_pressed(BTN3)) {
+      locked = 1;
+      i = 0;
+      LED_set(LED0, LED_ON);
+    }
+
     k_msleep(SLEEP_MS);
   }
 	return 0;
