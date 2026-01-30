@@ -60,6 +60,19 @@ static ssize_t ble_custom_characteristic_write_cb(struct bt_conn* conn, const st
 static const struct bt_uuid_128 ble_custom_service_uuid = BT_UUID_INIT_128(BLE_CUSTOM_SERVICE_UUID);
 static const struct bt_uuid_128 ble_custom_characteristic_uuid = BT_UUID_INIT_128(BLE_CUSTOM_CHARACTERISTIC_UUID);
 
+BT_GATT_SERVICE_DEFINE(
+    ble_custom_service,  // Name of the struct that will store the config for this service
+    BT_GATT_PRIMARY_SERVICE(&ble_custom_service_uuid),  // Setting the service UUID
+    BT_GATT_CHARACTERISTIC(
+        &ble_custom_characteristic_uuid.uuid,  // Setting the characteristic UUID
+        <BT_GATT_CHRC_* values ORd together>,  // Possible operations
+        <BT_GATT_PERM_* values ORd together>,  // Permissions that connecting devices have
+        ble_custom_characteristic_read_cb,     // Callback for when this characteristic is read from
+        ble_custom_characteristic_write_cb,    // Callback for when this characteristic is written to
+        ble_custom_characteristic_user_data    // Initial data stored in this characteristic
+        ),
+);
+
 int main(void) {
 
   if (0 > BTN_init()) {
