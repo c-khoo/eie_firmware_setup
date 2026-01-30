@@ -36,7 +36,7 @@ static const struct bt_data ble_advertising_data[] = {
   BT_DATA(BT_DATA_NAME_COMPLETE, CONFIG_BT_DEVICE_NAME, sizeof(CONFIG_BT_DEVICE_NAME)),
 };
 
-static uint8_t ble_custom_characteristic_user_data[20] = {};
+// static uint8_t ble_custom_characteristic_user_data[20] = {};   // not needed for challenge 2
 static uint8_t ble_second_characteristic_user_data[20] = {};
 
 static ssize_t ble_custom_characteristic_read_cb(struct bt_conn* conn, const struct bt_gatt_attr* attr,
@@ -69,16 +69,16 @@ BT_GATT_SERVICE_DEFINE(
     BT_GATT_PRIMARY_SERVICE(&ble_custom_service_uuid),  // Setting the service UUID
     BT_GATT_CHARACTERISTIC(
         &ble_custom_characteristic_uuid.uuid,  // Setting the characteristic UUID
-        BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE,  // Possible operations
-        BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,  // Permissions that connecting devices have
+        BT_GATT_CHRC_READ,  // Possible operations
+        BT_GATT_PERM_READ,  // Permissions that connecting devices have
         ble_custom_characteristic_read_cb,     // Callback for when this characteristic is read from
         ble_custom_characteristic_write_cb,    // Callback for when this characteristic is written to
-        ble_custom_characteristic_user_data    // Initial data stored in this characteristic
+        ble_second_characteristic_user_data    // Initial data stored in this characteristic
         ),
     BT_GATT_CHARACTERISTIC(
         &ble_second_characteristic_uuid.uuid,  // Setting the characteristic UUID
-        BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE,  // Possible operations
-        BT_GATT_PERM_READ | BT_GATT_PERM_WRITE,  // Permissions that connecting devices have
+        BT_GATT_CHRC_WRITE,  // Possible operations
+        BT_GATT_PERM_WRITE,  // Permissions that connecting devices have
         ble_custom_characteristic_read_cb,     // Callback for when this characteristic is read from
         ble_custom_characteristic_write_cb,    // Callback for when this characteristic is written to
         ble_second_characteristic_user_data    // Initial data stored in this characteristic
