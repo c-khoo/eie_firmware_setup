@@ -82,6 +82,22 @@ int main(void) {
     return 0;
   }
 
+  int err = bt_enable(NULL);
+  if (err) {
+    printk("Bluetooth init failed (err %d)\n", err);
+    return 0;
+  } else {
+    printk("Bluetooth initialized!\n");
+  }
+
+  err = bt_le_adv_start(BT_LE_ADV_CONN_FAST_1, ble_advertising_data, ARRAY_SIZE(ble_advertising_data), NULL, 0);
+  if (err) {
+    printk("Advertising failed (err %d)\n", err);
+    return 0;
+  } else {
+    printk("Advertising started!\n");
+  }
+
   while(1) {
     k_msleep(SLEEP_MS);
   }
