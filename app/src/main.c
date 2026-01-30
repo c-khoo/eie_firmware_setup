@@ -18,6 +18,8 @@
 #include <zephyr/kernel.h>
 #include <zephyr/settings/settings.h>
 #include <zephyr/sys/printk.h>
+#include "LED.h"
+#include "BTN.h"
 
 /* MACROS --------------------------------------------------------------------------------------- */
 
@@ -53,6 +55,11 @@ static const struct bt_data ble_scan_response_data[] = {
 
 static uint8_t ble_custom_characteristic_user_data[BLE_CUSTOM_CHARACTERISTIC_MAX_DATA_LENGTH + 1] =
     {'E', 'i', 'E'};
+
+static uint8_t led_on = 0;    // store the status of the LED to know whether to turn it on or not
+
+static uint16_t LED_ON_CMD[] = {'L', 'E', 'D', ' ', 'O', 'N'};
+static uint16_t LED_OFF_CMD[] = {'L', 'E', 'D', ' ', 'O', 'F', 'F'};
 
 /* BLE SERVICE SETUP ---------------------------------------------------------------------------- */
 
@@ -108,6 +115,31 @@ static ssize_t ble_custom_service_write(struct bt_conn* conn, const struct bt_ga
   }
   printk("\n");
 
+  // logic for handling whether LED turns on
+  uint8_t equal = 1;
+  for (uint16_t i = 0; i < sizeof(LED_ON_CMD) / sizeof(LED_ON_CMD[0]); i++) {
+    if (value[offset + i] != LED_ON_CMD[i]) {
+      equal = 0;
+      break;
+    }
+  }
+
+  if (equal) {
+    led_on = 1;
+  }
+
+  equal = 1;
+  for (uint16_t i = 0; i < sizeof(LED_OFF_CMD) / sizeof(LED_OFF_CMD[0]); i++) {
+    if (value[offset + i] != LED_OFF_CMD[i]) {
+      equal = 0;
+      break;
+    }
+  }
+
+  if (equal) {
+    led_on = 0;
+  }
+
   return len;
 }
 
@@ -139,5 +171,12 @@ int main(void) {
   while (1) {
     k_sleep(K_MSEC(1000));
     ble_custom_service_notify();
+
+    // turn led 1 on if command was sent
+    if (led_on) {
+      LED_set(LED0, LED_ON);
+    } else {
+      LED_set(LED0, LED_OFF);
+    }
   }
 }
